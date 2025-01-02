@@ -17,18 +17,19 @@
             $this->prix=$prix;
             $this->disponibilite=$disponibilite;
             $this->categorie_id=$category_id;
-            $this->image=$image
+            $this->image=$image;
         }
         public function ajouterVoiture($pdo){
-            $stm = $pdo->prepare("INSERT INTO voiture (marque,modele,annee,prix,disponibilite,id_categorie,image) values (:marque,:modele,:annee,:prix,:disponibilte,:id_categorie,:image)");
+            $stm = $pdo->prepare("INSERT INTO voiture (marque, modele, annee, prix, disponibilite, id_categorie, image) 
+            VALUES (:marque, :modele, :annee, :prix, :disponibilite, :id_categorie, :image)");
             $stm->execute([
-                ':marque'=>$this->marque,
-                ':annee'=>$this->annee,
-                ':annee'=>$this->annee,
-                ':prix'=>$this->prix,
-                ':disponibilite'=>$this->disponibilite,
-                ':id_categorie'=>$this->id_categorie,
-                ':image'=>$this->image
+            ':marque' => $this->marque,
+            ':modele' => $this->modele, 
+            ':annee' => $this->annee,
+            ':prix' => $this->prix,
+            ':disponibilite' => $this->disponibilite,
+            ':id_categorie' => $this->category_id,
+            ':image' => $this->image
             ]);
             return 'OK';
         }

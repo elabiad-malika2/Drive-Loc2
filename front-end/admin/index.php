@@ -201,65 +201,82 @@
 
     <!-- Add new car modal  -->
 
-    <div id="addCarModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
-        <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
-
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl  font-semibold text-orange-600">Add New Car</h3>
-                <button class="text-gray-500 hover:text-gray-700 closeAddCar"><i
-                        class="ri-close-circle-line text-2xl text-orange-600"></i></button>
+   <!-- Modal -->
+<div id="carModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white w-2/3 p-5 rounded-lg shadow-lg h-[90%] overflow-y-auto">
+        <h2 class="text-2xl font-bold mb-4">Add New Cars</h2>
+        <form id="carForm" action="../../back-end/controller/AjouterVoiture.php" method="POST" enctype="multipart/form-data">
+            <div id="carFields">
+                <div class="car-entry">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <input type="text" name="marque[]" placeholder="Marque" required class="border rounded p-2">
+                        <input type="text" name="modele[]" placeholder="Modèle" required class="border rounded p-2">
+                        <input type="number" name="annee[]" placeholder="Année" required class="border rounded p-2">
+                        <input type="number" name="prix[]" placeholder="Prix" required class="border rounded p-2">
+                        <select name="disponibilite[]" required class="border rounded p-2">
+                            <option value="1">Disponible</option>
+                            <option value="0">Indisponible</option>
+                        </select>
+                        <select name="category_id[]" required class="border rounded p-2">
+                            <option value="1">SUV</option>
+                            <option value="2">Sedan</option>
+                            <!-- Ajoutez d'autres catégories ici -->
+                        </select>
+                        <input type="file" name="image_path[]"  class="border rounded p-2">
+                    </div>
+                    <button type="button"  class="remove-btn text-red-500">Remove</button>
+                </div>
             </div>
-
-            <form action="./adminFunction/addCar.php" method="post">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-
-                    <div class="col-span-2">
-                        <label for="Car Number" class="mb-2 block text-sm font-medium text-gray-700">Car Number</label>
-                        <input placeholder="Enter car Number" type="text" id="carNumber" name="carNumber"
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500"
-                            required />
-                    </div>
-
-                    <div class="col">
-                        <label for="Brand Name" class="mb-2 block text-sm font-medium text-gray-700">Brand Name</label>
-                        <input placeholder="Enter car brand name" type="text" id="brandName" name="brandName"
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500"
-                            required />
-                    </div>
-
-                    <div>
-                        <label for="Model" class="mb-2 block text-sm font-medium text-gray-700">Model</label>
-                        <input placeholder="Enter model name" type="text" id="model" name="model"
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500"
-                            required />
-                    </div>
-
-                    <div>
-                        <label for="Price/Day" class="mb-2 block text-sm font-medium text-gray-700">Price/Day</label>
-                        <input placeholder="Enter price amount per 1 day" type="text" id="priceDay	" name="priceDay"
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500"
-                            required />
-                    </div>
-
-                    <div>
-                        <label for="year" class="mb-2 block text-sm font-medium text-gray-700">Year</label>
-                        <input placeholder="Enter modal year" type="text" id="year" name="year"
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500"
-                            required />
-                    </div>
-                </div>
-
-
-                <div class="mt-6 flex justify-end space-x-2">
-                    <button type="button"
-                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 closeAddCar">Cancel</button>
-                    <button type="submit" name="submit"
-                        class="px-8 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">Save</button>
-                </div>
-            </form>
-        </div>
+            <button type="button" id="addCarFieldBtn" class="mt-2 bg-gray-200 p-2 rounded">Add Another Car</button>
+            <div class="mt-4">
+                <button type="submit" name="submit" class="bg-green-500 text-white px-4 py-2 rounded">Save</button>
+                <button type="button"  id="closeModalBtn" class="bg-red-500 text-white px-4 py-2 rounded">Cancel</button>
+            </div>
+        </form>
     </div>
+</div>
+<script>
+// Modal toggling
+const addCarBtn = document.getElementById("addCarBtn");
+const carModal = document.getElementById("carModal");
+const closeModalBtn = document.getElementById("closeModalBtn");
 
+addCarBtn.addEventListener("click", () => carModal.classList.remove("hidden"));
+closeModalBtn.addEventListener("click", () => carModal.classList.add("hidden"));
+
+// Add new car fields
+const addCarFieldBtn = document.getElementById("addCarFieldBtn");
+const carFields = document.getElementById("carFields");
+
+addCarFieldBtn.addEventListener("click", () => {
+    const carEntry = document.createElement("div");
+    carEntry.classList.add("car-entry");
+    carEntry.innerHTML = `
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <input type="text" name="marque[]" placeholder="Marque" required class="border rounded p-2">
+            <input type="text" name="modele[]" placeholder="Modèle" required class="border rounded p-2">
+            <input type="number" name="annee[]" placeholder="Année" required class="border rounded p-2">
+            <input type="number" name="prix[]" placeholder="Prix" required class="border rounded p-2">
+            <select name="disponibilite[]" required class="border rounded p-2">
+                <option value="1">Disponible</option>
+                <option value="0">Indisponible</option>
+            </select>
+            <select name="category_id[]" required class="border rounded p-2">
+                <option value="1">SUV</option>
+                <option value="2">Sedan</option>
+            </select>
+            <input type="file" name="image_path[]" required class="border rounded p-2">
+        </div>
+        <button type="button" class="remove-btn text-red-500">Remove</button>
+    `;
+    carFields.appendChild(carEntry);
+
+    // Remove entry button
+    carEntry.querySelector(".remove-btn").addEventListener("click", () => carEntry.remove());
+});
+
+
+</script>
 <!-- Add New contrat modal  -->
 
 <div id="addContratModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
@@ -356,11 +373,12 @@
         </div>
     </div>
 
-   <script>
-    
-   
+<script>
+       
 
-   const ctx = document.getElementById('myChart').getContext('2d');
+
+
+const ctx = document.getElementById('myChart').getContext('2d');
     const myChart = new Chart(ctx, {
         type: 'bar',
         data: {

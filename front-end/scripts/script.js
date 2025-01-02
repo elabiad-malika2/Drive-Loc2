@@ -58,6 +58,3 @@ closeAddContrat.forEach(button => {
 const editClientBtn = document.getElementById('editClientBtn');
  
 // chart js
-
-
-    
