@@ -1,6 +1,10 @@
 
+<?php 
+require '../../Back-end/controller/AfficherVoiture.php';
+$cars = getVoiture::afficherVoitures();
 
-<!-- Html Page Struct -->
+?>
+
 <html>
 
 <head>
@@ -121,53 +125,80 @@
             </div>
 
             <!-- Statistics & Listings -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Stats Section -->
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-lg shadow flex justify-between items-center">
-                        <div>
-                            <h4 class="text-gray-600">Revenue Summary</h4>
-                            
-                            
-                            <p class="text-sm text-green-500">+4.5 from last month</p>
-                        </div>
-                        <i class="ri-line-chart-line text-3xl text-orange-600"></i>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow flex justify-between items-center">
-                        <div>
-                            <h4 class="text-gray-600">Contracts</h4>
-                                
+             <div class="bg-gray-100 min-h-screen p-6">
+            <div class="container mx-auto space-y-10">
+    <!-- Stats Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-lg shadow flex justify-between items-center">
+        <div>
+          <h4 class="text-gray-600 font-semibold">Revenue Summary</h4>
+          <p class="text-sm text-green-500 mt-2">+4.5% from last month</p>
+        </div>
+        <i class="ri-line-chart-line text-3xl text-orange-600"></i>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow flex justify-between items-center">
+        <div>
+          <h4 class="text-gray-600 font-semibold">Contracts</h4>
+          <p class="text-sm text-green-500 mt-2">+7.2% from last month</p>
+        </div>
+        <i class="ri-wallet-line text-3xl text-orange-600"></i>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow flex justify-between items-center">
+        <div>
+          <h4 class="text-gray-600 font-semibold">Clients</h4>
+          <p class="text-sm text-red-500 mt-2">-1.2% from last month</p>
+        </div>
+        <i class="ri-group-3-line text-3xl text-orange-600"></i>
+      </div>
+    </div>
 
-                            <p class="text-sm text-green-500">+7.2 from last month</p>
-                        </div>
-                        <i class="ri-wallet-line text-3xl text-orange-600"></i>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow flex justify-between items-center">
-                        <div>
-                            <h4 class="text-gray-600">Clients</h4>
-
-                           
-
-                            <p class="text-sm text-red-500">-1.2 from last month</p>
-                        </div>
-                        <i class="ri-group-3-line text-3xl text-orange-600"></i>
-                    </div>
-                </div>
-
-                <!-- Car Listings -->
-                <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow">
-                   <h4 class="text-lg font-bold mb-4">Contracts by Status</h4>
-                <div class="overflow-x-auto">
-                <div>
-                    <canvas id="myChart" class="responsiveCanvas" width="750" height="300" style="display: block; box-sizing: border-box;"></canvas>
-                </div>
-                </div>
-                </div>
-            </div>
+    <!-- Car Listings Section -->
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Car Listings</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <?php foreach ($cars as $car): ?>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <img src="../../Back-end/controller/<?php echo $car['image']; ?>" alt="Car Image" class="w-full h-40 object-contain rounded-lg mb-4">
+            <h4 class="text-lg font-bold text-gray-800"><?php echo $car['marque']; ?> <?php echo $car['modele']; ?></h4>
+            <p class="text-gray-600 mt-2">Year: <?php echo $car['annee']; ?></p>
+            <p class="text-gray-600">Price: $<?php echo number_format($car['prix'], 2); ?></p>
+            <p class="text-gray-600">Availability: <?php echo $car['disponibilite'] == 1 ? 'Available' : 'Not Available'; ?></p>
+            <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full" onclick="openEditModal(<?php echo $car['id']; ?>, '<?php echo $car['marque']; ?>', '<?php echo $car['modele']; ?>', '<?php echo $car['annee']; ?>', '<?php echo $car['prix']; ?>')">
+            Edit
+            </button>
+        </div>
+    <?php endforeach; ?>
+        <!-- Card 2 -->
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <img src="https://via.placeholder.com/300x150" alt="Car Image" class="w-full h-40 object-cover rounded-lg mb-4">
+          <h4 class="text-lg font-bold text-gray-800">Honda Civic</h4>
+          <p class="text-gray-600 mt-2">Model: 2022</p>
+          <p class="text-gray-600">Year: 2022</p>
+          <p class="text-gray-600">Price: $22,000</p>
+          <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full">
+            View Details
+          </button>
+        </div>
+        <!-- Card 3 -->
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <img src="https://via.placeholder.com/300x150" alt="Car Image" class="w-full h-40 object-cover rounded-lg mb-4">
+          <h4 class="text-lg font-bold text-gray-800">Ford Mustang</h4>
+          <p class="text-gray-600 mt-2">Model: 2021</p>
+          <p class="text-gray-600">Year: 2021</p>
+          <p class="text-gray-600">Price: $35,000</p>
+          <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full">
+            View Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
         </section>
     </div>
 
-    <!-- add new client modal -->
+    <!-- add new Categorie modal -->
     <div id="addClient" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
 
@@ -199,9 +230,9 @@
         </div>
     </div>
 
-    <!-- Add new car modal  -->
+    
 
-   <!-- Modal -->
+   <!--ADD Modal -->
 <div id="carModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
     <div class="bg-white w-2/3 p-5 rounded-lg shadow-lg h-[90%] overflow-y-auto">
         <h2 class="text-2xl font-bold mb-4">Add New Cars</h2>
@@ -235,7 +266,45 @@
         </form>
     </div>
 </div>
+<!-- Edit MODEL -->
+<div id="editCarModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white w-2/3 p-5 rounded-lg shadow-lg h-[90%] overflow-y-auto">
+        <h2 class="text-2xl font-bold mb-4">Edit Car</h2>
+        <form id="editCarForm" action="../../back-end/controller/EditVoiture.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" id="carId" name="id">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <input type="text" id="editMarque" name="marque" placeholder="Marque" required class="border rounded p-2">
+                <input type="text" id="editModele" name="modele" placeholder="Modèle" required class="border rounded p-2">
+                <input type="number" id="editAnnee" name="annee" placeholder="Année" required class="border rounded p-2">
+                <input type="number" id="editPrix" name="prix" placeholder="Prix" required class="border rounded p-2">
+                <select id="editDisponibilite" name="disponibilite" required class="border rounded p-2">
+                    <option value="1">Disponible</option>
+                    <option value="0">Indisponible</option>
+                </select>
+                <input type="file" name="image_path" class="border rounded p-2">
+            </div>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button type="button" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300" onclick="closeEditModal()">Cancel</button>
+                <button type="submit" name="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
+    function openEditModal(carId, marque, modele, annee, prix) {
+    document.getElementById("editCarModal").classList.remove("hidden");
+    document.getElementById("carId").value = carId;
+    document.getElementById("editMarque").value = marque;
+    document.getElementById("editModele").value = modele;
+    document.getElementById("editAnnee").value = annee;
+    document.getElementById("editPrix").value = prix;
+}
+
+// Close the edit modal
+function closeEditModal() {
+    document.getElementById("editCarModal").classList.add("hidden");
+}
 // Modal toggling
 const addCarBtn = document.getElementById("addCarBtn");
 const carModal = document.getElementById("carModal");

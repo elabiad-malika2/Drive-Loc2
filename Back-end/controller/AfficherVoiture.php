@@ -1,11 +1,7 @@
 <?php
-
-
-
-require_once ('/../Model/voiture.php');
-require_once ('/../Model/database.php');
-
-class getCar {
+require_once __DIR__ . '/../Model/voiture.php';
+require_once __DIR__ . '/../Model/database.php';
+class getVoiture {
     static function afficherVoitures(){
         $database = new GestionBaseDeDonnees();
         $pdo = $database->getConnection();

@@ -62,11 +62,11 @@
             $stm->execute([':idCategorie'=>$this->idCategorie]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        public function afficherVoitures($pdo)
+        public static function afficherVoitures($pdo)
         {
             $stm=$pdo->prepare("SELECT * from voiture ");
             $stm->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
         }
         public function rechercherParModele($pdo)
         {
