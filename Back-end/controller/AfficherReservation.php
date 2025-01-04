@@ -14,18 +14,14 @@ class getReservations {
     static function getReservationById($id){
         $database = new GestionBaseDeDonnees();
         $pdo = $database->getConnection();
-     
         $reservation = Reservation::getReservationById($pdo,$id);
-   
         return $reservation;
     }
     static function afficherReservationParClient($id)
     {
         $database = new GestionBaseDeDonnees();
         $pdo = $database->getConnection();
-     
         $reservation = Reservation::afficherReservationParClient($pdo,$id);
-   
         return $reservation;
     }
     
