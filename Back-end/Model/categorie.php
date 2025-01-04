@@ -37,7 +37,7 @@ class Categorie {
 
     
 
-    public function afficherCategories($pdo) {
+    public static function afficherCategories($pdo) {
             $stmt = $pdo->query("SELECT * FROM Categorie");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

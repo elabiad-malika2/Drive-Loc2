@@ -57,7 +57,7 @@
         
         }
     
-        public  function afficherAisId($pdo, $id) {
+        public  function afficherAvisId($pdo, $id) {
         
                 $query = "SELECT * FROM avis WHERE id = :id";
                 $stmt = $pdo->prepare($query);

@@ -6,7 +6,7 @@
         private $annee;
         private $prix;
         private $disponibilite;
-        private $category_id;
+        private $id_categorie;
         private $image;
 
         public function __construct($id=null,$marque,$modele,$annee,$prix,$disponibilite,$category_id,$image){
@@ -37,7 +37,7 @@
             $stm = $pdo->prepare("UPDATE voiture set marque=:marque,modele=:modele,annee=:annee,prix=:prix,disponibilite=:disponibilite,id_categorie=:id_categorie,image=:image where id =:id");
             $stm->execute([
                 ':marque'=>$this->marque,
-                ':annee'=>$this->annee,
+                ':modele'=>$this->modele,
                 ':annee'=>$this->annee,
                 ':prix'=>$this->prix,
                 ':disponibilite'=>$this->disponibilite,
@@ -52,15 +52,15 @@
             $stm->execute([':id'=>$this->id]);
             return 'OK';
         }
-        public function afficherVoitureId($pdo, $id){
-            $stm=$pdo->prepare("SELECT * from voiture where id = :id");
-            $stm->execute([':id'=>$this->id]);
+        public static function  afficherVoitureId($pdo, $id){
+            $stm=$pdo->prepare("SELECT * from voiture where id = ?");
+            $stm->execute([$id]);
             return $stm->fetch(PDO::FETCH_ASSOC);
         }
-        public function afficherVoitureCategorie($pdo, $idCategorie){
+        public static function afficherVoitureCategorie($pdo, $idCategorie){
             $stm=$pdo->prepare("SELECT * from voiture where id_categorie = :idCategorie");
-            $stm->execute([':idCategorie'=>$this->idCategorie]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stm->execute([':idCategorie'=>$idCategorie]);
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
         }
         public static function afficherVoitures($pdo)
         {
@@ -68,9 +68,14 @@
             $stm->execute();
             return $stm->fetchAll(PDO::FETCH_ASSOC);
         }
-        public function rechercherParModele($pdo)
+        public static function rechercherParModele($pdo,$modele)
         {
+            $modeleWithWildcards = "%" . $modele . "%";
+        
+            $stm = $pdo->prepare("SELECT * FROM VoitureView WHERE modele LIKE ?");
+            $stm->execute([$modeleWithWildcards]);
             
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
         }
 
     }

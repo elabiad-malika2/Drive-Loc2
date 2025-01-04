@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (isset($_SESSION['id'])) {
+    $user=$_SESSION['id'];
+    var_dump($user);
+}
+require_once('../../Back-end/controller/AfficherCategorie.php');
+$allCategories = getCategorie::afficherCategorie();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,6 +20,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    
 </head>
 
 <style>
@@ -116,76 +127,55 @@
     <section>
 
         <div class="py-16">
+            <div class="flex justify-between">
             <h2 class="text-center text-4xl font-bold text-gray-800 mb-10">
                 Explore Our Car Rentals
             </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            <div class="w-full sm:w-1/3 md:w-1/4">
+                <input  type="text" id="carSearch" placeholder="Search for cars..." class="w-full p-2 border rounded-md shadow-sm" />
+            </div>
+            <div class="w-full sm:w-1/3 md:w-1/4">
+                <select id="categorieFilter" onchange="filtrerVoitures(<?php echo $cat['id'] ?>)" class="w-full p-2 border rounded-md shadow-sm">
+                    <option value="">Select Category</option>
+                    <?php 
+                        foreach($allCategories as $cat)
+                        echo "<option value='".$cat['id']."'>".$cat['nom']."</option>"
+                    ?>
+                </select>
+            </div>
+            </div>
+            <div id="carContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
 
 
-                <div class="relative group overflow-hidden rounded-xl shadow-md">
-                    <img class="w-full h-120 object-cover group-hover:scale-110 transition-transform duration-300"
-                        src="./assets/luxury-collection.jpg" alt="Sport Car">
-                    <div
-                        class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-colors duration-300">
-                    </div>
-                    <div class="absolute bottom-4 left-4 text-white">
-                        <h3 class="text-xl font-semibold">Sport Car</h3>
-                    </div>
-                    <a href="#"
-                        class="absolute bottom-4 right-4 bg-orange-600 text-white p-2 rounded-full group-hover:bg-orange-500 transition-colors duration-300">
-                        <i class="ri-arrow-right-up-line text-xl"></i>
-                    </a>
-                </div>
 
-
-                <div class="relative group overflow-hidden rounded-xl shadow-md">
-                    <img class="w-full h-120 object-cover group-hover:scale-110 transition-transform duration-300"
-                        src="./assets/luxecar.jpg" alt="Convertible Car">
-                    <div
-                        class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-colors duration-300">
-                    </div>
-                    <div class="absolute bottom-4 left-4 text-white">
-                        <h3 class="text-xl font-semibold">Convertible Car</h3>
-                    </div>
-                    <a href="#"
-                        class="absolute bottom-4 right-4 bg-orange-600 text-white p-2 rounded-full group-hover:bg-orange-500 transition-colors duration-300">
-                        <i class="ri-arrow-right-up-line text-xl"></i>
-                    </a>
-                </div>
-
-
-                <div class="relative group overflow-hidden rounded-xl shadow-md">
-                    <img class="w-full h-120 object-cover group-hover:scale-110 transition-transform duration-300"
-                        src="./assets/sedancar.jpg" alt="Sedan Car">
-                    <div
-                        class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-colors duration-300">
-                    </div>
-                    <div class="absolute bottom-4 left-4 text-white">
-                        <h3 class="text-xl font-semibold">Sedan Car</h3>
-                    </div>
-                    <a href="#"
-                        class="absolute bottom-4 right-4 bg-orange-600 text-white p-2 rounded-full group-hover:bg-orange-500 transition-colors duration-300">
-                        <i class="ri-arrow-right-up-line text-xl"></i>
-                    </a>
-                </div>
-
-
-                <div class="relative group overflow-hidden rounded-xl shadow-md">
-                    <img class="w-full h-120 object-cover group-hover:scale-110 transition-transform duration-300"
-                        src="./assets/luxury.jpg" alt="Luxury Car">
-                    <div
-                        class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-colors duration-300">
-                    </div>
-                    <div class="absolute bottom-4 left-4 text-white">
-                        <h3 class="text-xl font-semibold">Luxury Car</h3>
-                    </div>
-                    <a href="#"
-                        class="absolute bottom-4 right-4 bg-orange-600 text-white p-2 rounded-full group-hover:bg-orange-500 transition-colors duration-300">
-                        <i class="ri-arrow-right-up-line text-xl"></i>
-                    </a>
-                </div>
 
             </div>
+            <!-- Modale de réservation -->
+            <div id="bookingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                <div class="bg-white rounded-lg p-6 w-96">
+                    <h2 class="text-xl font-bold mb-4">Réserver une voiture</h2>
+                    <form id="bookingForm" action="../../Back-end/controller/AjouterReservation.php" method="POST">
+                        <input type="hidden" id="carId" name="voitureId">
+                        <div class="mb-4">
+                            <label for="date_debut" class="block text-sm font-medium text-gray-700">Date de début</label>
+                            <input type="date" id="date_debut" name="date_debut" class="w-full border rounded-md p-2">
+                        </div>
+                        <div class="mb-4">
+                            <label for="date_fin" class="block text-sm font-medium text-gray-700">Date de fin</label>
+                            <input type="date" id="date_fin" name="date_fin" class="w-full border rounded-md p-2">
+                        </div>
+                        <div class="mb-4">
+                            <label for="lieu" class="block text-sm font-medium text-gray-700">Lieu</label>
+                            <input type="text" id="lieu" name="lieu" class="w-full border rounded-md p-2">
+                        </div>
+                        <div class="flex justify-end space-x-2">
+                            <button type="button" id="closeSimpleModal" class="bg-gray-400 text-white px-4 py-2 rounded-md">Annuler</button>
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Réserver</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -346,7 +336,7 @@
         </div>
     </footer>
 
-
+    <script src="voitures.js"></script>
 
 </body>
 

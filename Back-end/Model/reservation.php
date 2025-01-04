@@ -44,6 +44,12 @@ class Reservation {
         return $stm->fetch(PDO::FETCH_ASSOC);
         
     }
+    public static function afficherReservationParClient($pdo, $id) { 
+        $stm = $pdo->prepare("SELECT * FROM Reservation WHERE id_client = ?");
+        $stm->execute([$id]);
+        return $stm->fetchAll(PDO::FETCH_ASSOC);
+        
+    }
 
     public static function afficherTousReservation($pdo) { 
 

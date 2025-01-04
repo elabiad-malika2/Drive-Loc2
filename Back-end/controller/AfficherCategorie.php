@@ -1,6 +1,6 @@
 <?php
-require_once('../Model/categorie.php');
-require_once('../Model/database.php');
+require_once __DIR__ . '/../Model/categorie.php';
+require_once __DIR__ . '/../Model/database.php';
 class getCategorie{
     static function afficherCategorie(){
         $database = new GestionBaseDeDonnees();
