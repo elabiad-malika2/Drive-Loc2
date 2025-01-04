@@ -4,15 +4,15 @@ require_once __DIR__ . '/../Model/avis.php';
 require_once __DIR__ . '/../Model/database.php';
 
 class getAvis {
-    static function getAvisByIdUserRes($id,$idRes){
+    public static function showAvisByIdUserRes($id,$idRes){
 
         $database = new GestionBaseDeDonnees();
         $pdo = $database->getConnection();
-        $avis = Avis::getAvisByIdUserRes($pdo,$id,$idRes);
+        $avis = Avis::afficherAvisIdUserRes($pdo,$id,$idRes);
 
         return $avis;
     }
-    static function getAllAvis()
+    public static function showAllAvis()
     {
         
         $database = new GestionBaseDeDonnees();

@@ -1,7 +1,8 @@
 <?php
 session_start();
 require_once '../../Back-end/controller/AfficherReservation.php';
-
+require_once '../../Back-end/controller/afficherVoiture.php';
+require_once '../../Back-end/controller/afficherAvis.php';
 $id = $_SESSION['id'];
 $allReservations = getReservations::afficherReservationParClient($id);
 ?>
@@ -91,9 +92,12 @@ $allReservations = getReservations::afficherReservationParClient($id);
                 <?php
                 if (count($allReservations) > 0) {
                     foreach ($allReservations as $reservation) {
+                        $avis = getAvis::showAvisByIdUserRes($id, $reservation['id']);
+                        $voiture = getVoiture::afficherVoitureId($reservation['id_voiture']);
                         echo "
                         <div class='bg-white rounded-lg shadow-lg p-6'>
                             <h3 class='text-xl font-bold text-primary mb-4'>Reservation Details</h3>
+                            <img src='../../Back-end/controller/{$voiture['image']}' alt='{$voiture['modele']}' class='w-full h-48 object-contain rounded-md' />
                             <ul class='text-gray-700'>
                                 <li><span class='font-bold'>Adresse:</span> {$reservation['lieu']}</li>
                                 <li><span class='font-bold'>Date Debut:</span> {$reservation['date_debut']}</li>
@@ -106,8 +110,21 @@ $allReservations = getReservations::afficherReservationParClient($id);
                                     <input type='hidden' name='new-status' value='Canceled'>
                                     <input type='hidden' name='action' value='confirm'>
                                     <button type='submit' class='px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600'>Cancel</button>
-                                </form>
-                            </div>
+                                </form>";
+                                if ($avis) {
+                                    
+                                    echo "<button name='edit_review' onclick=\"openEditReviewModal('{$avis['id']}', '{$avis['avis']}', {$avis['stars']})\" class='mt-6 bg-primary text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
+                                    Modify Review
+                                    </button>
+                                    <button name='delete_review' class='mt-6 bg-red-600 text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
+                                        <a href='../../app/actions/deleteAvis.php?{$avis['id']}'>Delete Review</a>
+                                    </button>";
+                                } else {
+                                    echo "<button name='edit_reservation' onclick='openReviewModal({$reservation['id']})' class='mt-6 bg-primary text-black py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
+                                    Add Review
+                                    </button>";
+                                }
+                                echo "</div>
                         </div>";
                     }
                 } else {
@@ -115,8 +132,40 @@ $allReservations = getReservations::afficherReservationParClient($id);
                 }
                 ?>
             </div>
+
         </div>
     </section>
+    <div id="reviewModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center hidden">
+    <div class="bg-white p-8 rounded-lg w-1/3 shadow-2xl">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Add a Review</h2>
+        <form id="reviewForm" action="../../Back-end/controller/ajouterAvis.php" method="POST">
+            <input type="hidden" id="reservationId" name="reservation_id" />
+            
+            <div class="mb-6">
+                <label for="stars" class="block text-sm font-medium text-gray-600">Rating</label>
+                <select id="stars" name="stars" class="w-full mt-2 border rounded-lg p-3 bg-gray-100">
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <label for="message" class="block text-sm font-medium text-gray-600">Your Review</label>
+                <textarea id="message" name="message" class="w-full mt-2 border rounded-lg p-3 bg-gray-100" rows="5" placeholder="Write your experience..."></textarea>
+            </div>
+            
+            <div class="flex justify-end space-x-4">
+                <button type="button" class="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-800" onclick="closeReviewModal()">Cancel</button>
+                <button type="submit" name="submit" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-800">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+
 
     <!-- footer -->
     <footer class="bg-black text-white py-10 rounded-2xl mt-6 mb-6">
@@ -186,7 +235,16 @@ $allReservations = getReservations::afficherReservationParClient($id);
         </div>
     </footer>
 
+<script>
+     function openReviewModal(reservationId) {
+    document.getElementById('reservationId').value = reservationId;
+    document.getElementById('reviewModal').classList.remove('hidden');
+    }
 
+    function closeReviewModal() {
+    document.getElementById('reviewModal').classList.add('hidden');
+    }
+</script>
 </body>
 
 </html>

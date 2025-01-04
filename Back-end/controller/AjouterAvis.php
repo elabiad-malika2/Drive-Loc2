@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['submit'])){
         $avis = new Avis(null,$message,$stars,$reservationId);
         $resultat = $avis->ajouterAvis($pdo);
         if ($resultat == 'OK') {
-            header('Location: ../../front-end/client/reservation.php')
+            header('Location: ../../front-end/client/reservation.php');
         }
 
 }
