@@ -7,7 +7,7 @@ if (isset($_POST['start'])) {
     $start = (int)$_POST['start'];
     $database = new GestionBaseDeDonnees();
     $pdo = $database->getConnection();
-    $voiture = Voiture::getCustomVoiture($pdo, 6, $start);
+    $voiture = Voiture::getCustomVoiture($pdo, 2, $start);
     echo json_encode($voiture);
 } else {
     echo json_encode(['error' => 'Invalid input']);

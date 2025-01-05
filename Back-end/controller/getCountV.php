@@ -5,6 +5,6 @@ require_once __DIR__ . '/../Model/database.php';
 
         $database = new GestionBaseDeDonnees();
         $pdo = $database->getConnection();
-        $car = Voiture::getCountCar($pdo);
+        $car = Voiture::getCountVoiture($pdo);
         echo json_encode($car);
 ?>
