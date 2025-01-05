@@ -63,7 +63,7 @@
     
         public static  function afficherAvisId($pdo, $id) {
         
-                $query = "SELECT * FROM avis WHERE id = :id";
+                $query = "SELECT * FROM avis WHERE id = :id and deleted=0 ";
                 $stm = $pdo->prepare($query);
                 $stm->bindParam(':id', $id);
                 $stm->execute();
@@ -90,7 +90,7 @@
                 }
         }
         public static function afficherAvisIdUserRes($pdo,$idC,$idR){
-            $stm=$pdo->prepare("SELECT a.* from avis a INNER JOIN reservation r on a.reservation_id = r.id where r.id_client=:id and a.reservation_id = :idRes ");
+            $stm=$pdo->prepare("SELECT a.* from avis a INNER JOIN reservation r on a.reservation_id = r.id where r.id_client=:id and a.reservation_id = :idRes and a.deleted=0");
             $stm->execute(['id'=>$idC,'idRes'=>$idR]);
             return $stm->fetch(PDO::FETCH_ASSOC);
         }
