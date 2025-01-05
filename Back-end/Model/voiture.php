@@ -77,6 +77,22 @@
             
             return $stm->fetchAll(PDO::FETCH_ASSOC);
         }
+        public static function getCountCar($pdo){
+            $stmt = $pdo->prepare("SELECT COUNT(*) as totalCars from VoitureView");
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        public static function getCustomCars($pdo,$limit, $start){
+            
+            $stm = $pdo->prepare("SELECT * FROM VoitureView LIMIT :limit OFFSET :offset");
+            $stm->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stm->bindParam(':offset', $start, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $results = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+            return $results;
+        }
 
     }
 
