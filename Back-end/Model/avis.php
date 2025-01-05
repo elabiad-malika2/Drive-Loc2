@@ -54,6 +54,12 @@
                 }
         
         }
+        public static function softDeleteAvis($pdo,$reviewId) {
+            $sql = "UPDATE avis SET deleted = 1 WHERE id = ?";
+            $stm = $pdo->prepare($sql);
+            $stm->execute([$reviewId]);
+            return 'OK';
+        }
     
         public static  function afficherAvisId($pdo, $id) {
         

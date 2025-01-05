@@ -111,15 +111,15 @@ $allReservations = getReservations::afficherReservationParClient($id);
                                     <input type='hidden' name='action' value='confirm'>
                                     <button type='submit' class='px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600'>Cancel</button>
                                 </form>";
-                                if ($avis) {
+                                if($avis) {
                                         echo"
                                         <button name='editAvis' onclick=\"openEditReviewModal('{$avis['id']}','{$avis['reservation_id']}','{$avis['message']}', {$avis['stars']})\" class='mt-6 bg-red-600 text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
                                             Modifier Avis
                                         </button>
                                         <button name='deleteAvis' class='mt-6 bg-red-600 text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
-                                            <a href='../../app/actions/deleteAvis.php?id={$avis['id']}'>Delete Avis</a>
+                                            <a href='../../Back-end/controller/deleteAvis.php?id={$avis['id']}'>Delete Avis</a>
                                         </button>";
-                                } else {
+                                }else {
                                     echo "<button name='edit_reservation' onclick='openReviewModal({$reservation['id']})' class='mt-6 bg-red-600 text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
                                             Ajouter Avis
                                         </button>";
