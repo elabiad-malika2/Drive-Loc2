@@ -16,7 +16,7 @@ $allCategories = getCategorie::afficherCategorie();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gorent - Home </title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/x-icon" href="./assets/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.svg">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
@@ -63,7 +63,7 @@ $allCategories = getCategorie::afficherCategorie();
 
                     <div class="flex items-center space-x-2 text-gray-800 font-semibold">
                         <a href="./index.php">
-                            <img src="./assets/gorent-logo.svg" width="160px">
+                            <img src="../../assets/gorent-logo.svg" width="160px">
                         </a>
                     </div>
 
@@ -94,7 +94,7 @@ $allCategories = getCategorie::afficherCategorie();
     <!-- Hero section -->
 
     <section
-        class="relative bg-cover bg-center bg-[url('/assets/hero-bg.jpg')] h-[96vh] rounded-2xl flex justify-center items-center">
+        class="relative bg-cover bg-center bg-[url('../../assets/hero-bg.jpg')] h-[96vh] rounded-2xl flex justify-center items-center">
         <div class="absolute inset-0 bg-black/50 rounded-2xl"></div>
 
         <div class="relative text-center text-white max-w-3xl px-4">
@@ -147,7 +147,12 @@ $allCategories = getCategorie::afficherCategorie();
             <div id="carContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
 
 
+            </div>
+            <div class="w-full flex justify-center items-center">
+                <div id="pagesContainer" class="flex gap-2">
+                    
 
+                </div>
 
             </div>
             <!-- Modale de réservation -->
@@ -273,7 +278,7 @@ $allCategories = getCategorie::afficherCategorie();
         <div class="max-w-7xl mx-6 px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
                 <a href="./index.php">
-                    <img src="./assets/gorent-logo.svg" width="160px">
+                    <img src="../../assets/gorent-logo.svg" width="160px">
                 </a>
                 <p class="mt-4 text-white">
                     Experience the ease and convenience of renting a car with Go rent.

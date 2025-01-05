@@ -1,5 +1,50 @@
 const carCardsContainer = document.getElementById('carContainer');
 
+fetch('../../Back-end/controller/getCountV.php')
+.then(response => response.json())
+.then(carsNumber => {
+    const totalPages = Math.ceil(carsNumber.totalCars /6);
+    console.log(totalPages);
+    document.getElementById('pagesContainer').innerHTML=``;
+    for(let i=1;i<=totalPages;i++)
+    document.getElementById('pagesContainer').innerHTML+=`<p class="page border border-gray-900 rounded-md px-3 py-1">${i}</p>`;
+    document.querySelectorAll('.page').forEach(page=>{
+        
+        page.addEventListener('click', function () {
+            const startIndex = (parseInt(page.textContent) - 1) * 6;
+
+            const formData = new FormData();
+            formData.append('start', startIndex);
+
+            fetch('../../Back-end/controller/getCustomV.php', {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then((cars) => {
+                    if (cars.error) {
+                        console.error('Server error:', cars.error);
+                    } else {
+                        console.log('Fetched cars:', cars);
+                        showAllCars(cars); 
+                    }
+                })
+                .catch((err) => {
+                    console.error('Error fetching cars:', err);
+                });
+        });
+
+    })
+
+})
+
+.catch(err => console.error('Error fetching Count:', err));
+
 function showCars(cars)
 {
      cars.forEach(car => {          
