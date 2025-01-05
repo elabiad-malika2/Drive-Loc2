@@ -28,13 +28,12 @@
             
         }
         public function modifierAvis($pdo) {
-                $query = "UPDATE avis SET message = :message, stars = :stars, reservation_id = :reservation_id, archive = :archive WHERE id = :id";
+                $query = "UPDATE avis SET message = :message, stars = :stars, reservation_id = :reservation_id WHERE id = :id";
                 $stm = $pdo->prepare($query);
                 $stm->bindParam(':id', $this->id);
                 $stm->bindParam(':message', $this->message);
                 $stm->bindParam(':stars', $this->stars);
                 $stm->bindParam(':reservation_id', $this->reservation_id);
-                $stm->bindParam(':archive', $this->archive, PDO::PARAM_BOOL);
                 
                 if ($stm->execute()) {
                     return "OK";

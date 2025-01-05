@@ -112,18 +112,19 @@ $allReservations = getReservations::afficherReservationParClient($id);
                                     <button type='submit' class='px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600'>Cancel</button>
                                 </form>";
                                 if ($avis) {
-                                    
-                                    echo "<button name='edit_review' onclick=\"openEditReviewModal('{$avis['id']}', '{$avis['avis']}', {$avis['stars']})\" class='mt-6 bg-primary text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
-                                    Modify Review
-                                    </button>
-                                    <button name='delete_review' class='mt-6 bg-red-600 text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
-                                        <a href='../../app/actions/deleteAvis.php?{$avis['id']}'>Delete Review</a>
-                                    </button>";
+                                        echo"
+                                        <button name='editAvis' onclick=\"openEditReviewModal('{$avis['id']}','{$avis['reservation_id']}','{$avis['message']}', {$avis['stars']})\" class='mt-6 bg-red-600 text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
+                                            Modifier Avis
+                                        </button>
+                                        <button name='deleteAvis' class='mt-6 bg-red-600 text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
+                                            <a href='../../app/actions/deleteAvis.php?id={$avis['id']}'>Delete Avis</a>
+                                        </button>";
                                 } else {
-                                    echo "<button name='edit_reservation' onclick='openReviewModal({$reservation['id']})' class='mt-6 bg-primary text-black py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
-                                    Add Review
-                                    </button>";
+                                    echo "<button name='edit_reservation' onclick='openReviewModal({$reservation['id']})' class='mt-6 bg-red-600 text-white py-2 px-4 rounded hover:bg-[#826642] transition duration-300'>
+                                            Ajouter Avis
+                                        </button>";
                                 }
+                                
                                 echo "</div>
                         </div>";
                     }
@@ -135,6 +136,7 @@ $allReservations = getReservations::afficherReservationParClient($id);
 
         </div>
     </section>
+    <!-- Add avis -->
     <div id="reviewModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center hidden">
     <div class="bg-white p-8 rounded-lg w-1/3 shadow-2xl">
         <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Add a Review</h2>
@@ -160,6 +162,37 @@ $allReservations = getReservations::afficherReservationParClient($id);
             <div class="flex justify-end space-x-4">
                 <button type="button" class="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-800" onclick="closeReviewModal()">Cancel</button>
                 <button type="submit" name="submit" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-800">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+    <!-- Edit Avis  -->
+    <div id="reviewModalEdit" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center hidden">
+    <div class="bg-white p-8 rounded-lg w-1/3 shadow-2xl">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Moidifier Avis</h2>
+        <form id="EditReviewForm" action="../../Back-end/controller/modifierAvis.php" method="POST">
+            <input type="hidden" id="avisIdEdit" name="avisIdEdit" />
+            <input type="number" id="reservation_Id" name="reservationId" />
+            
+            <div class="mb-6">
+                <label for="starsEdit" class="block text-sm font-medium text-gray-600">Rating</label>
+                <select id="starsEdit" name="starsEdit" class="w-full mt-2 border rounded-lg p-3 bg-gray-100">
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <label for="messageEdit" class="block text-sm font-medium text-gray-600">Your Review</label>
+                <textarea id="messageEdit" name="messageEdit" class="w-full mt-2 border rounded-lg p-3 bg-gray-100" rows="5" placeholder="Write your experience..."></textarea>
+            </div>
+            
+            <div class="flex justify-end space-x-4">
+                <button type="button" class="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-800" onclick="closeEditReviewModal()">Cancel</button>
+                <button type="submit" name="submit" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-800">Modifier</button>
             </div>
             </form>
         </div>
@@ -243,6 +276,24 @@ $allReservations = getReservations::afficherReservationParClient($id);
 
     function closeReviewModal() {
     document.getElementById('reviewModal').classList.add('hidden');
+    }
+
+
+
+    function openEditReviewModal(avisId,idR,message, stars) {
+
+    document.getElementById('reviewModalEdit').classList.remove('hidden');
+
+    document.getElementById('avisIdEdit').value = avisId;
+    document.getElementById('reservation_Id').value = idR;
+    document.getElementById('messageEdit').value = message;
+    document.getElementById('starsEdit').value = stars;
+
+}
+
+
+    function closeEditReviewModal() {
+        document.getElementById('reviewModalEdit').classList.add('hidden');
     }
 </script>
 </body>
