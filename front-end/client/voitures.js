@@ -66,8 +66,11 @@ function showCars(cars)
                         
                         
                         <div class="mt-4 flex space-x-2">
-                            <button class="w-full bg-orange-600 hover:bg-orange-500 text-white text-sm py-2 px-4 rounded-lg transition-all"  onclick="openModal(${car.id})" >
+                            <button class="w-full bg-orange-600 hover:bg-orange-500 text-white text-sm py-2 px-4 rounded-lg transition-all"  onclick="openModal(${car.id_voiture})" >
                                 Book Now
+                            </button>
+                            <button class="w-full bg-orange-600 hover:bg-orange-500 text-white text-sm py-2 px-4 rounded-lg transition-all"  onclick="openReviewsModal(${car.id_voiture})" >
+                                Tous Les Avis
                             </button>
                         </div>
                     </div>
@@ -182,3 +185,39 @@ document.getElementById('closeSimpleModal').addEventListener('click', () => {
     document.getElementById('bookingModal').classList.add('hidden'); // Cache la modale
 });
 
+function openReviewsModal(idCar) {
+    const formData = new FormData();
+    formData.append('carId', idCar);
+    console.log(idCar)
+    fetch('../../Back-end/controller/AfficherAvisVoiture.php', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (Array.isArray(data) && data.length > 0) {
+                const reviewsContainer = document.getElementById('reviewsContainer');
+                reviewsContainer.innerHTML = '';
+
+                data.forEach(review => {
+                    const reviewElement = `
+                        <div class="p-4 border-b">
+                            <p class="text-sm ">${review.message}</p>
+                            <p class="text-yellow-500">
+                                ${'★'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}
+                            </p>
+                        </div>
+                    `;
+                    reviewsContainer.innerHTML += reviewElement;
+                });
+            } else {
+                document.getElementById('reviewsContainer').innerHTML = `
+                    <p class="text-gray-600 text-center">No reviews available for this car.</p>
+                `;
+            }
+
+            document.getElementById('reviewsModal').classList.remove('hidden');
+        })
+        .catch(error => console.error('Error fetching reviews:', error));
+}

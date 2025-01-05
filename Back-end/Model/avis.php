@@ -95,10 +95,11 @@
             return $stm->fetch(PDO::FETCH_ASSOC);
         }
         public static function afficherAvisVoiture($pdo,$idV){
-            $stm=$pdo->prepare("SELECT a.* from avis a inner join reservation r on a.reservation_id=r.id where r.car_id = :id");
-            $stm->bind_param(':id',$id);
-            $stm->execute();
-            $resultat=$stm->fetchAll(PDO::FETCH_ASSOC);
+            $stm = $pdo->prepare("SELECT a.* FROM avis a INNER JOIN reservation r ON a.reservation_id = r.id WHERE r.id_voiture = :id AND deleted = 0");
+            $stm->bindValue(':id', $idV, PDO::PARAM_INT); 
+            $stm->execute(); 
+            $resultat = $stm->fetchAll(PDO::FETCH_ASSOC); 
+            
             return $resultat;
         }
 

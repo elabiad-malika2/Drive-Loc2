@@ -8,7 +8,7 @@ class getReservations {
     static function getAllReservations(){
         $database = new GestionBaseDeDonnees();
         $pdo = $database->getConnection();
-        $reservations = Reservation::getAllReservations($pdo);
+        $reservations = Reservation::afficherTousReservation($pdo);
         return $reservations;
     }
     static function getReservationById($id){

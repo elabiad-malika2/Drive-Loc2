@@ -2,6 +2,8 @@
 <?php 
 require '../../Back-end/controller/AfficherVoiture.php';
 $cars = getVoiture::afficherVoitures();
+require '../../Back-end/controller/AfficherCategorie.php';
+$Categories = getCategorie::afficherCategorie();
 
 ?>
 
@@ -31,46 +33,22 @@ $cars = getVoiture::afficherVoitures();
             </div>
             <nav class="p-6">
                 <ul class="space-y-6">
-                    <li class="text-orange-600">
-                        <a href="dashbord.php" class="flex items-center space-x-4 text-gray-600 hover:text-orange-600">
+                <li class="text-orange-600">
+                        <a href="index.php" class="flex items-center space-x-4 text-gray-600 hover:text-orange-600">
                             <i class="ri-dashboard-line text-orange-600"></i>
                             <span class="text-orange-600">Dashboard</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="../pages/clients.php"
-                            class="flex items-center space-x-4 text-gray-600 hover:text-orange-600">
-                            <i class="ri-group-line"></i>
-                            <span>Clients</span>
+                    <li class="text-orange-600">
+                        <a href="reservation.php" class="flex items-center space-x-4 text-gray-600 hover:text-orange-600">
+                            <i class="ri-dashboard-line "></i>
+                            <span class="">Reservations</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="../pages/cars.php"
-                            class="flex items-center space-x-4 text-gray-600 hover:text-orange-600">
-                            <i class="ri-car-line"></i>
-                            <span>Cars</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="../pages/contrats.php"
-                            class="flex items-center space-x-4 text-gray-600 hover:text-orange-600">
-                            <i class="ri-save-line"></i>
-                            <span>Contrats</span>
-                        </a>
-                    </li>
-                </ul>
-                <hr class="my-6">
-                <ul class="space-y-6">
-                    <li>
-                        <a href="#" class="flex items-center space-x-4 text-gray-600 hover:text-orange-600">
-                            <i class="ri-exchange-dollar-line"></i>
-                            <span>Transactions</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center space-x-4 text-gray-600 hover:text-orange-600">
-                            <i class="ri-bar-chart-box-line"></i>
-                            <span>Statistiques</span>
+                    <li class="text-orange-600">
+                        <a href="avis.php" class="flex items-center space-x-4 text-gray-600 hover:text-orange-600">
+                            <i class="ri-dashboard-line "></i>
+                            <span class="">Avis</span>
                         </a>
                     </li>
                 </ul>
@@ -200,7 +178,7 @@ $cars = getVoiture::afficherVoitures();
                 </div>
 
                 <div class="mt-6 flex justify-end space-x-2">
-                    <button type="button"
+                    <button type="button" id="closeCatModal"
                         class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 closeAddClient">Cancel</button>
                     <button type="submit" name="submit"
                         class="px-8 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">Save</button>
@@ -228,9 +206,10 @@ $cars = getVoiture::afficherVoitures();
                             <option value="0">Indisponible</option>
                         </select>
                         <select name="category_id[]" required class="border rounded p-2">
-                            <option value="1">SUV</option>
-                            <option value="2">Sedan</option>
-                            <!-- Ajoutez d'autres catégories ici -->
+                        <?php 
+                            foreach($Categories as $cat)
+                            echo "<option value='".$cat['id']."'>".$cat['nom']."</option>"
+                            ?>
                         </select>
                         <input type="file" name="image_path[]"  class="border rounded p-2">
                     </div>
@@ -261,8 +240,10 @@ $cars = getVoiture::afficherVoitures();
                     <option value="0">Indisponible</option>
                 </select>
                 <select id="editCategory" name="id_categorie" required class="border rounded p-2">
-                    <option value="1">SUV</option>
-                    <option value="2">Sedan</option>
+                <?php 
+                            foreach($Categories as $cat)
+                            echo "<option value='".$cat['id']."'>".$cat['nom']."</option>"
+                            ?>
                 </select>
                 <input type="file" name="image" class="border rounded p-2">
             </div>
@@ -275,6 +256,12 @@ $cars = getVoiture::afficherVoitures();
 </div>
 
 <script>
+    document.getElementById('addClientBtn').addEventListener("click", function(){
+        document.getElementById("addClient").classList.remove("hidden");
+    })
+    document.getElementById('closeCatModal').addEventListener("click", function(){
+        document.getElementById("addClient").classList.add("hidden");
+    })
     function openEditModal(carId, marque, modele, annee, prix,id_categorie) {
     document.getElementById("editCarModal").classList.remove("hidden");
     document.getElementById("carId").value = carId;
@@ -315,8 +302,10 @@ addCarFieldBtn.addEventListener("click", () => {
                 <option value="0">Indisponible</option>
             </select>
             <select name="category_id[]" required class="border rounded p-2">
-                <option value="1">SUV</option>
-                <option value="2">Sedan</option>
+                <?php 
+                            foreach($Categories as $cat)
+                            echo "<option value='".$cat['id']."'>".$cat['nom']."</option>"
+                            ?>
             </select>
             <input type="file" name="image_path[]" required class="border rounded p-2">
         </div>

@@ -2,7 +2,6 @@
 session_start();
 if (isset($_SESSION['id'])) {
     $user=$_SESSION['id'];
-    var_dump($user);
 }
 require_once('../../Back-end/controller/AfficherCategorie.php');
 $allCategories = getCategorie::afficherCategorie();
@@ -80,7 +79,7 @@ $allCategories = getCategorie::afficherCategorie();
                     <div class="hidden md:flex items-center space-x-4">
                         <button
                             class="px-6 py-2 bg-orange-600 text-white text-lg rounded-full hover:bg-[#737373] hover:text-white">
-                            <a href="./login.php">Login</a>
+                            <a href="../login.php">Login</a>
                         </button>
                     </div>
 
@@ -184,7 +183,18 @@ $allCategories = getCategorie::afficherCategorie();
         </div>
     </section>
 
-
+    <div id="reviewsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-6 rounded-md w-96 max-h-[80%] overflow-y-auto text-black">
+        <h2 class="text-xl font-bold mb-4">Reviews</h2>
+        <div id="reviewsContainer" class="space-y-4">
+        </div>
+        <button 
+            class="mt-4 bg-gray-500 text-white py-2 px-4 rounded"
+            onclick="document.getElementById('reviewsModal').classList.add('hidden')">
+            Close
+        </button>
+    </div>
+</div>
     <!-- testimonails -->
 
     <div class="bg-gray-50 py-16">
