@@ -4,25 +4,27 @@ class Theme {
     private $id;
     private $nom;
     private $image;
+    private $description;
 
-    public function __construct($id = null, $nom, $image) {
+    public function __construct($id = null, $nom, $image,$description) {
         $this->id = $id;
         $this->nom = $nom;
         $this->image = $image;
+        $this->description = $description;
     }
 
     public function ajouterTheme($pdo) {
         
         
-            $stm = $pdo->prepare("INSERT INTO Theme (nom, image) VALUES (?, ?)");
-            $stm->execute([$this->nom, $this->image]);
+            $stm = $pdo->prepare("INSERT INTO Theme (nom, image,description) VALUES (?, ?,?)");
+            $stm->execute([$this->nom, $this->image,$this->description]);
             return 'OK';
         
     }
 
     public function modifierTheme($pdo) {
-            $stm = $pdo->prepare("UPDATE Theme SET nom = ? WHERE id = ?");
-            $stm->execute([$this->nom, $this->id]);
+            $stm = $pdo->prepare("UPDATE Theme SET nom = ? , description = ? WHERE id = ?");
+            $stm->execute([$this->nom,$this->description ,$this->id]);
             return 'OK';
     }
 
