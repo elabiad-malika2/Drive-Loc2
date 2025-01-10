@@ -40,8 +40,8 @@ class Tag {
 
     public static function afficherTags($pdo) {
 
-            $stm = $pdo->query("SELECT * FROM Tag");
-            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        $stm = $pdo->query("SELECT * FROM Tag");
+        return $stm->fetchAll(PDO::FETCH_ASSOC);
 
     }
 }

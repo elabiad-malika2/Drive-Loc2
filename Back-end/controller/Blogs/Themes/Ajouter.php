@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['submit'])) {
 
             if ($res == 'OK') {
                 header('Location: ../../../../front-end/admin/themes.php');
-                exit; // Assurez-vous de sortir après redirection
+                exit;
             } else {
                 echo "Couldn't add theme for entry $index";
             }
