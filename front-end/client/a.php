@@ -1,31 +1,40 @@
 <?php
 require_once('../../Back-end/controller/Blogs/Tags/afficher.php');
+require_once('../../Back-end/controller/Blogs/Articles/search.php');
 require_once('../../Back-end/controller/Blogs/Articles/afficher.php');
 require_once('../../Back-end/Model/Commentaire.php');
 session_start();
 $user=$_SESSION['id'];
 $tags=afficherTag::afficherTousTag();
 
-
+    
     $theme=$_GET["idTheme"];
-    $articles=afficherArticle::afficherArticleThemes($theme,5,0);
+    $articles=afficherArticle::afficherArticleThemes($theme,$_SESSION['page'],0);
     $total=$articles[0]["totalArticle"];
-    $totalPage=ceil($total/5);
+    $totalPage=ceil($total/$_SESSION['page']);
     if(isset($_GET['page']))
     {
         $page = $_GET['page'];
-        $start = ($page-1) * 5;
-        $articles=afficherArticle::afficherArticleThemes($theme,5,$start);
+        $parPage = $_SESSION['page'];
+        $start = ($page-1) * $parPage;
+        $articles=afficherArticle::afficherArticleThemes($theme,$parPage,$start);
         $total=$articles[0]["totalArticle"];
-        $totalPage=ceil($total/5);
+        $totalPage=ceil($total/$parPage);
 
     }
     if(isset($_GET['items']))
     {
+        $_SESSION['page'] = $_GET['items'];
         $parPage = $_GET['items'];
         $articles=afficherArticle::afficherArticleThemes($theme,$parPage,0);
         $total=$articles[0]["totalArticle"];
         $totalPage=ceil($total/$parPage);
+    }
+    if (isset($_GET['search'])) {
+            $titre=$_GET["search"];
+            echo $titre;
+            $idTheme=$_GET["idTheme"];
+            $articles=search::searchArticle($titre,$idTheme);
     }
 
 
@@ -92,6 +101,11 @@ $tags=afficherTag::afficherTousTag();
                     <option value="10">10</option>
                     <option value="15">15</option>
                 </select>
+                <input type="hidden" name="idTheme" value="<?php echo $theme?>">
+            </form>
+
+            <form method="GET" action="">
+                <input type="search" onchange="this.form.submit()" name="search" placeholder="Rechercher..." class="px-4 py-2 border rounded-lg text-gray-700">
                 <input type="hidden" name="idTheme" value="<?php echo $theme?>">
             </form>
 

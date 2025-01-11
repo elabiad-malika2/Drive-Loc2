@@ -75,19 +75,19 @@ class Article {
                 return $stm->fetchAll(PDO::FETCH_ASSOC);
         }
 
-    public function attacherTagArticle($pdo, $tagId) {
-            $stm = $pdo->prepare("INSERT INTO tags_article (id_article, id_tag) VALUES (?, ?)");
-            $stm->execute([$this->id, $tagId]);
-            return 'OK';
-    }
+        public function attacherTagArticle($pdo, $tagId) {
+                $stm = $pdo->prepare("INSERT INTO tags_article (id_article, id_tag) VALUES (?, ?)");
+                $stm->execute([$this->id, $tagId]);
+                return 'OK';
+        }
 
-    public function detacherTagArticle($pdo, $tagId) {
-        
-            $stm = $pdo->prepare("DELETE FROM tags_article WHERE id_article = ? AND id_tag = ?");
-            $stm->execute([$this->id, $tagId]);
-            return 'OK';
-        
-    }
+        public function detacherTagArticle($pdo, $tagId) {
+                
+                $stm = $pdo->prepare("DELETE FROM tags_article WHERE id_article = ? AND id_tag = ?");
+                $stm->execute([$this->id, $tagId]);
+                return 'OK';
+                
+        }
 
 
         public static function afficherTagsForArticle($pdo, $articleId) {
@@ -102,6 +102,36 @@ class Article {
         return $stm->fetchAll(PDO::FETCH_ASSOC);
         
     }
+    public static function searchArticleByTitre($pdo, $titre, $themeId, $limit, $offset)
+    {
+        $titreSearch = "%" . $titre . "%";
+    
+        // Préparation de la requête SQL
+        $sql = "SELECT 
+                    (SELECT COUNT(*) FROM article) AS totalArticle, 
+                    ar.*
+                FROM article ar
+                WHERE id_theme = :id_theme AND titre LIKE :titre 
+                LIMIT :limit OFFSET :offset";
+    
+        $stm = $pdo->prepare($sql);
+    
+        // Liaison des paramètres
+        $stm->bindParam(':id_theme', $themeId, PDO::PARAM_INT);
+        $stm->bindParam(':titre', $titreSearch, PDO::PARAM_STR);
+    
+        // Les paramètres limit et offset doivent être forcés dans la requête car les paramètres limit et offset 
+        // ne peuvent pas être liés directement en utilisant bindParam.
+        $stm->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stm->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+    
+        // Exécution de la requête
+        $stm->execute();
+    
+        // Retourne les résultats
+        return $stm->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     
 }
 
