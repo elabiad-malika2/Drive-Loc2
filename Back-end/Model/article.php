@@ -52,9 +52,28 @@ class Article {
 
     public static function afficherTousArticles($pdo) {
         
-            $stm = $pdo->query("SELECT * FROM Article");
+            $stm = $pdo->query("SELECT 
+                                        (SELECT COUNT() FROM article) AS totalArticle, 
+                                        ar.*
+                                FROM 
+                                article ar;");
             return $stm->fetchAll(PDO::FETCH_ASSOC);
     }
+        public static function afficherArticlesByThemeId($pdo,$idArticle,$limit,$offset) {
+
+
+                
+                $stm = $pdo->prepare("SELECT 
+                                        (SELECT COUNT(*) FROM article) AS totalArticle, 
+                                        ar.*
+                                        FROM article ar
+                                        WHERE id_theme = :id_theme limit :limit offset :offset");
+                $stm->bindParam(':id_theme',$idArticle,PDO::PARAM_INT);
+                $stm->bindParam(':limit',$limit,PDO::PARAM_INT);
+                $stm->bindParam(':offset',$offset,PDO::PARAM_INT);
+                $stm->execute();
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+        }
 
     public function attacherTagArticle($pdo, $tagId) {
             $stm = $pdo->prepare("INSERT INTO tags_article (id_article, id_tag) VALUES (?, ?)");
@@ -71,16 +90,16 @@ class Article {
     }
 
 
-    public static function afficherTagsForArticle($pdo, $articleId) {
-            $stm = $pdo->prepare("
+        public static function afficherTagsForArticle($pdo, $articleId) {
+        $stm = $pdo->prepare("
                 SELECT t.id, t.nom
-                FROM tags t
+                FROM tag t
                 INNER JOIN tags_article ta ON t.id = ta.id_tag
                 WHERE ta.id_article = :articleId
-            ");
-            $stm->bindParam(':articleId', $articleId, PDO::PARAM_INT);
-            $stm->execute();
-            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        ");
+        $stm->bindParam(':articleId', $articleId, PDO::PARAM_INT);
+        $stm->execute();
+        return $stm->fetchAll(PDO::FETCH_ASSOC);
         
     }
     

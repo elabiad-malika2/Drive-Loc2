@@ -1,3 +1,15 @@
+<?php
+require_once('../../Back-end/controller/Blogs/Commantaire/afficher.php');
+require_once('../../Back-end/Model/Commentaire.php');
+
+session_start();
+$user=$_SESSION['id'];
+$commantaire=afficherCommentaire::affichersCommentaireArticle();
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -67,11 +79,12 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Commentaires (12)</h2>
 
             <!-- Add Comment Form -->
-            <form class="mb-8">
+            
+            <form class="mb-8" action="../../Back-end/controller/Blogs/Commantaire/Ajouter.php" method="POST">
                 <div class="flex items-start space-x-4">
                     <img src="/api/placeholder/40/40" alt="Your avatar" class="w-10 h-10 rounded-full">
                     <div class="flex-grow">
-                        <textarea rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="Ajouter un commentaire..."></textarea>
+                        <textarea rows="3" name="commantaire" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="Ajouter un commentaire..."></textarea>
                         <div class="mt-3 flex justify-end">
                             <button type="submit" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">
                                 Commenter
@@ -83,72 +96,61 @@
 
             <!-- Comments List -->
             <div class="space-y-6">
-                <!-- Comment 1 - With edit mode -->
-                <div class="flex space-x-4">
-                    <img src="/api/placeholder/40/40" alt="Commenter" class="w-10 h-10 rounded-full">
-                    <div class="flex-grow">
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h4 class="font-semibold text-gray-900">Jean Martin</h4>
-                                    <p class="text-sm text-gray-500">Il y a 1 heure</p>
+                <?php if (!empty($commantaire)): ?>
+                    <?php foreach ($commantaire as $comment): ?>
+                        <div class="flex space-x-4">
+                            <img src="/api/placeholder/40/40" alt="Commenter" class="w-10 h-10 rounded-full">
+                            <div class="flex-grow">
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900"><?php echo htmlspecialchars($comment['nom']); ?></h4>
+                                            <p class="text-sm text-gray-500"></p>
+                                        </div>
+                                        <?php if ($comment['id_client'] === $user) :?>
+                                            <div class="flex items-center space-x-2">
+                                                <a href="?edit_id=<?php echo $comment['id']; ?>" class="text-gray-400 hover:text-blue-500">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                    </svg>
+                                                </a>
+                                                <a href="../../Back-end/controller/Blogs/Commantaire/Supprimer.php?delete_id=<?php echo $comment['id']; ?>" class="text-gray-400 hover:text-blue-500">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <p class="mt-2 text-gray-700">
+                                        <?php echo htmlspecialchars($comment['Commantaire']); ?>
+                                    </p>
                                 </div>
-                                <div class="flex items-center space-x-2">
-                                    <button class="text-gray-400 hover:text-blue-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
-                                    </button>
-                                    <button class="text-gray-400 hover:text-red-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <textarea class="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg" rows="2">Excellent article ! Les voitures électriques sont vraiment l'avenir de la mobilité.</textarea>
-                            <div class="mt-2 flex justify-end space-x-2">
-                                <button class="px-4 py-1 text-sm text-gray-600 hover:text-gray-800">
-                                    Annuler
-                                </button>
-                                <button class="px-4 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                    Sauvegarder
-                                </button>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Comment 2 - Normal view -->
-                <div class="flex space-x-4">
-                    <img src="/api/placeholder/40/40" alt="Commenter" class="w-10 h-10 rounded-full">
-                    <div class="flex-grow">
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h4 class="font-semibold text-gray-900">Sophie Bernard</h4>
-                                    <p class="text-sm text-gray-500">Il y a 2 heures</p>
-                                </div>
-                                <div class="flex items-center space-x-2">
-                                    <button class="text-gray-400 hover:text-blue-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
-                                    </button>
-                                    <button class="text-gray-400 hover:text-red-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <p class="mt-2 text-gray-700">
-                                Je suis totalement d'accord ! J'utilise une voiture électrique depuis 6 mois et je ne reviendrai pas en arrière.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-gray-500">Aucun commentaire pour le moment.</p>
+                <?php endif; ?>
             </div>
+            <?php if (isset($_GET['edit_id'])): ?>                
+                <form action="../../Back-end/controller/Blogs/Commantaire/Modifier.php" method="POST">
+                    <input type="hidden" name="edit_id" value="<?php echo htmlspecialchars($_GET['edit_id']); ?>">
+                    <div class="flex items-start space-x-4">
+                        <img src="/api/placeholder/40/40" alt="Your avatar" class="w-10 h-10 rounded-full">
+                        <div class="flex-grow">
+                            <textarea rows="3" name="commantaire" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"></textarea>
+                            <div class="mt-3 flex justify-end">
+                                <button type="submit" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">
+                                    Mettre à jour
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            <?php endif; ?>
+
+
 
             <!-- Load More Comments -->
             <div class="mt-8 text-center">
