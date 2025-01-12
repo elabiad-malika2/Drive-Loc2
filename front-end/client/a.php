@@ -5,6 +5,7 @@ require_once('../../Back-end/controller/Blogs/Articles/afficher.php');
 require_once('../../Back-end/Model/Commentaire.php');
 session_start();
 $user=$_SESSION['id'];
+$_SESSION['page']=5;
 $tags=afficherTag::afficherTousTag();
 
     
@@ -121,57 +122,59 @@ $tags=afficherTag::afficherTousTag();
         <!-- Grille d'articles -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <?php foreach ($articles as $art) : ?>
-                <div  class="block bg-white rounded-xl shadow-lg overflow-hidden card-hover">
-                    <div class="relative">
-                        <img src="../../Back-end/<? $art['image']; ?>" alt="Article" class="w-full h-48 object-cover">
-                        <div class="absolute top-4 right-4 flex space-x-2">
-                            <button class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
-                                <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
-                                </svg>
-                            </button>
-                            <button class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
-                                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <img src="" alt="Avatar" class="w-10 h-10 rounded-full">
-                            <div class="ml-3">
-                                <p class="font-semibold text-gray-900">Marie Dupont</p>
-                                <p class="text-sm text-gray-500">Il y a 2 heures</p>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3"><?= htmlspecialchars($art['titre']); ?></h3>
-                        <p class="text-gray-600 mb-4"><?= htmlspecialchars($art['description']); ?></p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">#électrique</span>
-                            <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">#écologie</span>
-                        </div>
-                        <div class="flex items-center justify-between pt-4 border-t">
-                            <div class="flex items-center space-x-4">
-                                <button class="flex items-center text-gray-500 hover:text-orange-600">
-                                        <a href="detailsArticle.php?idArticle=<?php echo $art['id']; ?>" >
-                                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                            </svg>
-                                        </a>
-                                        <span>24</span>
-                                </button>
-                                
-                                <button class="flex items-center text-gray-500 hover:text-orange-600">
-                                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                <?php if ($art["status"]=='Accepted') : ?>
+                    <div  class="block bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <div class="relative">
+                            <img src="../../Back-end/<? $art['image']; ?>" alt="Article" class="w-full h-48 object-cover">
+                            <div class="absolute top-4 right-4 flex space-x-2">
+                                <button class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
+                                    <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
                                     </svg>
-                                    <span>Partager</span>
+                                </button>
+                                <button class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
+                                    <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
                                 </button>
                             </div>
                         </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <img src="" alt="Avatar" class="w-10 h-10 rounded-full">
+                                <div class="ml-3">
+                                    <p class="font-semibold text-gray-900">Marie Dupont</p>
+                                    <p class="text-sm text-gray-500">Il y a 2 heures</p>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3"><?= htmlspecialchars($art['titre']); ?></h3>
+                            <p class="text-gray-600 mb-4"><?= htmlspecialchars($art['description']); ?></p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">#électrique</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">#écologie</span>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t">
+                                <div class="flex items-center space-x-4">
+                                    <button class="flex items-center text-gray-500 hover:text-orange-600">
+                                            <a href="detailsArticle.php?idArticle=<?php echo $art['id']; ?>" >
+                                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                </svg>
+                                            </a>
+                                            <span>24</span>
+                                    </button>
+                                    
+                                    <button class="flex items-center text-gray-500 hover:text-orange-600">
+                                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                        </svg>
+                                        <span>Partager</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-            </div>
+                <?php endif;?>
             <?php endforeach; ?>
         </div>
         

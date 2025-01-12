@@ -4,7 +4,8 @@ require_once('../../Back-end/Model/Commentaire.php');
 
 session_start();
 $user=$_SESSION['id'];
-$commantaire=afficherCommentaire::affichersCommentaireArticle();
+$idArticle=$_GET['idArticle'];
+$commantaire=afficherCommentaire::affichersCommentaireArticle($idArticle);
 
 
 
@@ -80,10 +81,11 @@ $commantaire=afficherCommentaire::affichersCommentaireArticle();
 
             <!-- Add Comment Form -->
             
-            <form class="mb-8" action="../../Back-end/controller/Blogs/Commantaire/Ajouter.php" method="POST">
+            <form class="mb-8" action="../../Back-end/controller/Blogs/Commantaire/Ajouter.php?idA=<?= $idArticle?>" method="POST">
                 <div class="flex items-start space-x-4">
                     <img src="/api/placeholder/40/40" alt="Your avatar" class="w-10 h-10 rounded-full">
                     <div class="flex-grow">
+                        <input type="hidden" name="idA" value="<?= $idArticle?>">
                         <textarea rows="3" name="commantaire" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="Ajouter un commentaire..."></textarea>
                         <div class="mt-3 flex justify-end">
                             <button type="submit" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">
@@ -98,6 +100,7 @@ $commantaire=afficherCommentaire::affichersCommentaireArticle();
             <div class="space-y-6">
                 <?php if (!empty($commantaire)): ?>
                     <?php foreach ($commantaire as $comment): ?>
+                        <?php var_dump($comment);?>
                         <div class="flex space-x-4">
                             <img src="/api/placeholder/40/40" alt="Commenter" class="w-10 h-10 rounded-full">
                             <div class="flex-grow">
@@ -109,7 +112,7 @@ $commantaire=afficherCommentaire::affichersCommentaireArticle();
                                         </div>
                                         <?php if ($comment['id_client'] === $user) :?>
                                             <div class="flex items-center space-x-2">
-                                                <a href="?edit_id=<?php echo $comment['id']; ?>" class="text-gray-400 hover:text-blue-500">
+                                                <a href="?idArticle=<?= $comment['id_article'];?>?edit_id=<?php echo $comment['id']; ?>" class="text-gray-400 hover:text-blue-500">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                                     </svg>

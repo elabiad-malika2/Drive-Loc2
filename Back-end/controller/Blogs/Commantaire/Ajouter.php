@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = $database->getConnection();
 
         $clientId = $_SESSION['id'];
-        $articleId = 1;
+        $articleId = $_POST['idA'];
         $commantaire = $_POST['commantaire'];
    
         $comment = new Commantaire(null,$articleId,$clientId,$commantaire);
