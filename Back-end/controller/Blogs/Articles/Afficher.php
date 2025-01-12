@@ -11,10 +11,15 @@ class afficherArticle {
         return $articles;
         
     }
-
+    public static function afficherArticleStatus(){
+        $database = new GestionBaseDeDonnees();
+        $pdo = $database->getConnection();
+        $articles = Article::afficherArticleStatus($pdo);
+        return $articles;
+    }
 
 }
-// var_dump(afficherArticle::afficherArticleThemes(1,5,0))
+// var_dump(afficherArticle::afficherArticleStatus());
 
     
 

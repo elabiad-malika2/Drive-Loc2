@@ -100,7 +100,6 @@ $commantaire=afficherCommentaire::affichersCommentaireArticle($idArticle);
             <div class="space-y-6">
                 <?php if (!empty($commantaire)): ?>
                     <?php foreach ($commantaire as $comment): ?>
-                        <?php var_dump($comment);?>
                         <div class="flex space-x-4">
                             <img src="/api/placeholder/40/40" alt="Commenter" class="w-10 h-10 rounded-full">
                             <div class="flex-grow">
