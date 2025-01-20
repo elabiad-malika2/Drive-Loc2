@@ -111,7 +111,7 @@ $commantaire=afficherCommentaire::affichersCommentaireArticle($idArticle);
                                         </div>
                                         <?php if ($comment['id_client'] === $user) :?>
                                             <div class="flex items-center space-x-2">
-                                                <a href="?idArticle=<?= $comment['id_article'];?>?edit_id=<?php echo $comment['id']; ?>" class="text-gray-400 hover:text-blue-500">
+                                                <a href="?idArticle=<?= $comment['id_article'];?>&edit_id=<?php echo $comment['id']; ?>" class="text-gray-400 hover:text-blue-500">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                                     </svg>

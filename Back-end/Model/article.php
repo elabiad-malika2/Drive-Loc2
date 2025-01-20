@@ -135,6 +135,22 @@ class Article {
                 return $stm->fetchAll(PDO::FETCH_ASSOC);
 
         }
+        public static function addToFavori($pdo, $articleId,$userId) {
+                $stm = $pdo->prepare("INSERT INTO favori (article_id, user_id) VALUES (:article_id,:user_id)");
+                $stm->bindParam(':article_id', $articleId, PDO::PARAM_INT);
+                $stm->bindParam(':user_id', $userId, PDO::PARAM_INT);
+                $stm->execute();
+                return 'OK';
+                
+        }
+        public static function checkFavori($pdo, $articleId,$userId) {
+                    $stmt = $pdo->prepare("SELECT COUNT(*) as favori FROM favori where article_id = :article_id and user_id = :user_id");
+                    $stmt->bindParam(':article_id', $articleId, PDO::PARAM_INT);
+                    $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+                    $stmt->execute();
+                    return $stmt->fetch(PDO::FETCH_ASSOC);
+               
+            }
 
 }
 
